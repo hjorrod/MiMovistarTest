@@ -11,4 +11,6 @@
     <string name="fav_text">Included in your favourite users:</string>
     <string name="location_title">Location</string>
     <string name="contact_title">Contact</string>
+    <string name="device_type">phone</string>
+
 </resources>

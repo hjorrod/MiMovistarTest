@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.mimovistartest.BR
+import com.mimovistartest.R
 import com.mimovistartest.util.OnShowErrorListener
 import kotlin.reflect.KClass
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -71,7 +72,10 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(viewModelCla
     private fun initDataBinding() {
         binding = DataBindingUtil.bind<T>(requireView())!!
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.setVariable(BR.viewModel, this@BaseFragment.viewModel)
+        if (resources.getString(R.string.device_type) == "phone")
+            binding.setVariable(BR.viewModel, this@BaseFragment.viewModel)
+        else
+            binding.setVariable(BR.viewModelTablet, this@BaseFragment.viewModel)
         lifecycle.addObserver(this@BaseFragment.viewModel)
         addBindingVariables()
     }

@@ -33,8 +33,8 @@ class UsersListFragment :
 
     private fun setUpView() {
         //Set up the recycler view
-        binding.userList.apply {
-            (itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+        binding.userList?.let { rV ->
+            (rV.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
             val adapter = UserListAdapter(
                 loadListener = {
                     viewModel.loading(false)
@@ -50,13 +50,13 @@ class UsersListFragment :
                     viewModel.deleteUser(it)
                 }
             )
-            this.adapter = adapter
+            rV.adapter = adapter
 
             /** add listener to handle when show the Load_More button to load more users **/
-            addOnScrollListener(object :
-                PaginationListener(layoutManager as LinearLayoutManager) {
-                override fun isFilterEnabled(): Boolean = viewModel.isFilterEnabled() ?: false
-                override fun isLoading(): Boolean = viewModel.isLoading() ?: false
+            rV.addOnScrollListener(object :
+                PaginationListener(rV.layoutManager as LinearLayoutManager) {
+                override fun isFilterEnabled(): Boolean = viewModel.isFilterEnabled()
+                override fun isLoading(): Boolean = viewModel.isLoading()
                 override fun scrollCompleted() {
                     viewModel.scrollCompleted()
                 }
@@ -64,13 +64,13 @@ class UsersListFragment :
 
             /** SnapHelper is a helper class that helps in snapping any child view of the RecyclerView. */
             val snapHelper = StartSnapHelper()
-            onFlingListener = null
-            snapHelper.attachToRecyclerView(this)
+            rV.onFlingListener = null
+            snapHelper.attachToRecyclerView(rV)
         }
 
         binding.apply {
             /** set Listener to edit text to filter by name **/
-            etSearch.addTextChangedListener(object : TextWatcher {
+            etSearch?.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     handlerSearch.removeCallbacks(runnableSearch)
@@ -81,11 +81,11 @@ class UsersListFragment :
             })
 
             /** set Listener to checkBox to Sort the list by Name or by Gender **/
-            cbSortByName.setOnCheckedChangeListener { _, isChecked ->
-                sortUsersList(isChecked, cbSortByGender.isChecked)
+            cbSortByName?.setOnCheckedChangeListener { _, isChecked ->
+                sortUsersList(isChecked, cbSortByGender?.isChecked ?: false)
             }
-            cbSortByGender.setOnCheckedChangeListener { _, isChecked ->
-                sortUsersList(cbSortByName.isChecked, isChecked)
+            cbSortByGender?.setOnCheckedChangeListener { _, isChecked ->
+                sortUsersList(cbSortByName?.isChecked ?: false, isChecked)
             }
         }
     }
@@ -115,6 +115,6 @@ class UsersListFragment :
 
     private var handlerSearch = Handler(Looper.getMainLooper())
     private val runnableSearch = Runnable {
-        viewModel.searchByNameOrEmail(binding.etSearch.text.toString())
+        viewModel.searchByNameOrEmail(binding.etSearch?.text?.toString() ?: "")
     }
 }
