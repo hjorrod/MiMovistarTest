@@ -32,8 +32,8 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(viewModelCla
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(getLayoutId(), container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val isScreenRotating = savedInstanceState?.getBoolean(IS_SCREEN_ROTATING) ?: false
 
@@ -45,7 +45,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(viewModelCla
         if (!isScreenRotating)
             init()
         else
-            onScreenRotated(savedInstanceState!!)
+            savedInstanceState?.let { onScreenRotated(it) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

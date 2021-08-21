@@ -1,8 +1,5 @@
 package com.mimovistartest.domain.usecases
 
-import com.mimovistartest.data.api.RandomCoApiException
-import com.mimovistartest.data.common.ServiceError
-import com.mimovistartest.data.common.ServiceErrorInfo
 import com.mimovistartest.data.repository.IUsersRepository
 import com.mimovistartest.data.util.Result
 import com.mimovistartest.domain.common.UseCase

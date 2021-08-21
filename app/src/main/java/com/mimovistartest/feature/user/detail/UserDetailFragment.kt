@@ -23,13 +23,8 @@ class UserDetailFragment
         super.getBundleArguments()
         args.userVO.apply {
             binding.user = this
-            //getLocation(this.locationId)
         }
     }
-
-//    private fun getLocation(id: Int) {
-//        viewModel.getLocation(id)
-//    }
 
     override fun onDestroy() {
         super.onDestroy()

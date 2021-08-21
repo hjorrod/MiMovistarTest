@@ -7,7 +7,7 @@ import com.mimovistartest.data.entities.UserEntity
 
 @Database(
     entities = [UserEntity::class],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 

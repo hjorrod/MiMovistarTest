@@ -6,7 +6,7 @@ import com.mimovistartest.util.OnAddDataSetListener
 abstract class BaseAdapter<T>:  RecyclerView.Adapter<BaseViewHolder<T>>(),
     OnAddDataSetListener<T> {
 
-    protected val dataSet = mutableListOf<T>()
+    private val dataSet = mutableListOf<T>()
 
     override fun addDataSet(items: List<T>) {
         dataSet.clear()

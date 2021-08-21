@@ -10,6 +10,7 @@ class UsersRepository (
     private val local: ILocalDataSource,
     private val remote: IUsersRemoteDataSource
 ) : IUsersRepository {
+
     override suspend fun getUsersList(count: Int?): Result<UserPageDTO> {
         return when (val remoteUsers = remote.getUsersList(count)) {
             is Result.Success -> Result.Success(remoteUsers.data)

@@ -21,6 +21,5 @@ abstract class PaginationListener(private val layoutManager: LinearLayoutManager
             if(visibleItemCount + firstVisibleItem >= total)
                 scrollCompleted()
         }
-
     }
 }

@@ -69,7 +69,6 @@ val databaseModule = module {
 
     // Room Database instance
     single {
-
         Room.databaseBuilder(
             androidApplication(),
             AppDatabase::class.java,

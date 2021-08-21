@@ -1,7 +1,5 @@
 package com.mimovistartest.feature.user.list
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -67,14 +65,11 @@ class UsersListViewModel(
             scope = viewModelScope,
             params = GetUsersListUseCase.Params(40)
         ){ result ->
-            Log.d("randomCo", "resultado obtenido getUsersList ${_usersList.value?.size}")
             when (result) {
                 is Result.Success -> {
-                    Log.d("randomCo", "resultado obtenido getUsersList EXITO !! ${result.data.users.size} - ${_usersList.value?.size}")
                     _usersList.value = result.data.users.map()
                 }
                 is Result.Failure -> {
-                    Log.d("randomCo", "resultado obtenido getUsersList FAIL !! ${result.error?.errorInfo?.message}")
                     loading(false)
                     error.value = ""
                 }
@@ -147,14 +142,14 @@ class UsersListViewModel(
         }
     }
 
-    fun searchByName(name: String, listToSearch: MutableList<UserVO>? = _totalList.value) {
-        Log.d("randomCo", " searchByName $name")
-        if (name.isNotEmpty())
-            updateList(listToSearch?.filter { user -> user.name.contains(name, ignoreCase = true) }?.toMutableList())
+    fun searchByNameOrEmail(typedText: String, listToSearch: MutableList<UserVO>? = _totalList.value) {
+        if (typedText.isNotEmpty())
+            updateList(listToSearch?.filter { user -> user.name.contains(typedText, ignoreCase = true) ||
+                    user.email.contains(typedText, ignoreCase = true) }?.toMutableList())
         else
             updateList(_totalList.value?.toMutableList())
 
-        isFilterEnabled = name.isNotEmpty()
+        isFilterEnabled = typedText.isNotEmpty()
     }
 
     fun isFilterEnabled(): Boolean = isFilterEnabled

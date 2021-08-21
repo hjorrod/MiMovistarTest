@@ -29,7 +29,7 @@ class UsersRemoteDataSource(private val randomCoApi: RandomCoApi) :
     }
 
     private fun getUniqueUserList(usersList: List<UserDTO>): List<UserDTO> {
-        //Note: distinct by email because email mut be unique
+        //Note: distinct by email because email must be unique
         return usersList.distinctBy { it.email }.toList().sortedBy { it.name.name }
     }
 }

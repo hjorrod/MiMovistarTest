@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,9 +12,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.mimovistartest.R
 import com.mimovistartest.base.BaseFragment
 import com.mimovistartest.databinding.FragmentUserListBinding
-import com.mimovistartest.model.UserVO
 import com.mimovistartest.util.*
-import org.koin.android.ext.android.bind
 
 
 class UsersListFragment :
@@ -43,16 +40,13 @@ class UsersListFragment :
                     viewModel.loading(false)
                 },
                 userClickListener = { userVO ->
-                    Log.d("randomCo", " user Clicked")
                     val directions = UsersListFragmentDirections.navigateToUserDetail(userVO)
                     findNavController().navigate(directions)
                 },
                 favStarClickListener = { userVO ->
-                    Log.d("randomCo", " onFav Clicked")
                     viewModel.handleFavEvent(userVO)
                 },
                 removeClickListener = {
-                    Log.d("randomCo", " remove Clicked")
                     viewModel.deleteUser(it)
                 }
             )
@@ -79,7 +73,6 @@ class UsersListFragment :
             etSearch.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    Log.d("randomCo", " onTextChanged $s - $count")
                     handlerSearch.removeCallbacks(runnableSearch)
                     handlerSearch.postDelayed(runnableSearch, 1200)
                 }
@@ -89,11 +82,9 @@ class UsersListFragment :
 
             /** set Listener to checkBox to Sort the list by Name or by Gender **/
             cbSortByName.setOnCheckedChangeListener { _, isChecked ->
-                Log.d("randomCo", " SortBy.NAME Clicked $isChecked")
                 sortUsersList(isChecked, cbSortByGender.isChecked)
             }
             cbSortByGender.setOnCheckedChangeListener { _, isChecked ->
-                Log.d("randomCo", " SortBy.GENDER Clicked $isChecked")
                 sortUsersList(cbSortByName.isChecked, isChecked)
             }
         }
@@ -124,6 +115,6 @@ class UsersListFragment :
 
     private var handlerSearch = Handler(Looper.getMainLooper())
     private val runnableSearch = Runnable {
-        viewModel.searchByName(binding.etSearch.text.toString())
+        viewModel.searchByNameOrEmail(binding.etSearch.text.toString())
     }
 }
