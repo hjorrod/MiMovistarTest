@@ -138,7 +138,10 @@ class UsersListViewModel(
             SortBy.GENDER_NAME -> {
                 updateList(listToSort?.sortedWith(compareBy({ it.gender }, { it.name }))?.toMutableList())
             }
-            else -> updateList(listToSort)
+            else -> updateList(
+                if(isFilterEnabled())listToSort
+                else _totalList.value?.toMutableList()
+            )
         }
     }
 
