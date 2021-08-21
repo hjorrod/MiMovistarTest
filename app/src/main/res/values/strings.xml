@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">MiMovistarTest</string>
+    <string name="app_name">RandomCo App</string>
+    <string name="error_message">An error has occurred</string>
+    <string name="load_more">Load More</string>
+    <string name="loading">Loading...</string>
+    <string name="search_hint">Search by name..</string>
+    <string name="sort_by">Sort by:</string>
+    <string name="sort_by_name">Name</string>
+    <string name="sort_by_gender">Gender</string>
+    <string name="filter_by_fav">Show only Fav</string>
+    <string name="fav_text">Included in your favourite users:</string>
+    <string name="location_title">Location</string>
+    <string name="contact_title">Contact</string>
+
+
 </resources>

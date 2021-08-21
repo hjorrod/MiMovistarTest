@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="layout_margin_min">4dp</dimen>
+    <dimen name="layout_margin_1">8dp</dimen>
+    <dimen name="layout_margin_2">16dp</dimen>
+    <dimen name="layout_margin_3">24dp</dimen>
+    <dimen name="min_top_margin">2dp</dimen>
+
+    <dimen name="search_height">30dp</dimen>
+    <dimen name="sort_layout_height">40dp</dimen>
+    <dimen name="load_more_button_height">35dp</dimen>
+
+    <dimen name="card_corner_radius">5dp</dimen>
+    <dimen name="image_corner_radius">5dp</dimen>
+    <dimen name="card_stroke_width">3dp</dimen>
+    <dimen name="image_width">80dp</dimen>
+    <dimen name="image_height">80dp</dimen>
+
+    <dimen name="fav_star_height">25dp</dimen>
+    <dimen name="fav_star_width">25dp</dimen>
+
+    <dimen name="filter_button_height">22dp</dimen>
+
+    <!--    Text-->
+    <dimen name="text_padding">5dp</dimen>
+    <dimen name="small_text">13sp</dimen>
+    <dimen name="big_text">18sp</dimen>
+    <dimen name="medium_text">15sp</dimen>
+
+</resources>

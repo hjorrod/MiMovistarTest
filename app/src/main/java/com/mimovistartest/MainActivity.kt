@@ -1,11 +1,8 @@
 package com.mimovistartest
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import com.mimovistartest.base.BaseActivity
+import com.mimovistartest.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
+class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main)  {
+
 }

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.mimovistartest.model.UserVO" />
+
+        <variable
+            name="viewModel"
+            type="com.mimovistartest.feature.user.detail.UserDetailViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/blue">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/detail_user_image_cv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_1"
+            app:cardCornerRadius="@dimen/image_corner_radius"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/detail_user_image"
+                android:layout_width="@dimen/image_width"
+                android:layout_height="@dimen/image_height"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{user.picture}" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/detail_user_name"
+            style="@style/TextCardView.UserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:paddingTop="@dimen/layout_margin_1"
+            android:text="@{user.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detail_user_image_cv"
+            tools:text="Name" />
+
+        <RelativeLayout
+            android:id="@+id/layout_detail_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_3"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="@id/layout_detail_fav"
+            app:layout_constraintTop_toBottomOf="@+id/detail_user_name">
+
+            <TextView
+                android:id="@+id/detail_contact_title"
+                style="@style/TextCardView.UserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_title"
+                tools:text="CONTACT" />
+
+            <TextView
+                android:id="@+id/detail_user_email"
+                style="@style/TextCardView.ExtraInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{user.email}"
+                android:layout_below="@id/detail_contact_title"
+                android:ellipsize="end"
+                tools:text="Email" />
+
+            <TextView
+                android:id="@+id/detail_user_phone"
+                style="@style/TextCardView.ExtraInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_user_email"
+                android:text='@{"Phone: " + user.phone}'
+                android:ellipsize="end"
+                tools:text="Phone" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_detail_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/detail_registered_date_text"
+            app:layout_constraintStart_toStartOf="@id/layout_detail_fav"
+            app:layout_constraintTop_toBottomOf="@+id/layout_detail_contact">
+
+            <TextView
+                android:id="@+id/detail_location_title"
+                style="@style/TextCardView.UserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/location_title"
+                tools:text="LOCATION" />
+
+            <TextView
+                android:id="@+id/detail_location_street"
+                style="@style/TextCardView.LocationInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_location_title"
+                android:ellipsize="end"
+                android:text="@{user.location.street}"
+                tools:text="Avenida Adelina, 42" />
+
+            <TextView
+                android:id="@+id/detail_location_city"
+                style="@style/TextCardView.LocationInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_location_street"
+                android:text="@{user.location.city}"
+                android:ellipsize="end"
+                tools:text="Madrid" />
+
+            <TextView
+                android:id="@+id/detail_location_state"
+                style="@style/TextCardView.LocationInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/detail_location_city"
+                android:text="@{user.location.state}"
+                android:ellipsize="end"
+                tools:text="España" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/detail_registered_date_text"
+            style="@style/TextCardView.LocationInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/layout_margin_2"
+            android:ellipsize="end"
+            android:text='@{"Registered date: " + user.registeredDate}'
+            app:layout_constraintBottom_toTopOf="@+id/layout_detail_fav"
+            app:layout_constraintStart_toStartOf="@id/layout_detail_fav"
+            tools:text="Registered date: 18/07/1986" />
+
+        <LinearLayout
+            android:id="@+id/layout_detail_fav"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/layout_margin_1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layout_detail_location">
+
+            <TextView
+                android:id="@+id/detail_fav_text"
+                style="@style/TextCardView.LocationInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:text='@string/fav_text'
+                tools:text="Included in your favourite users:" />
+
+            <ImageView
+                android:id="@+id/detail_fav_icon"
+                android:layout_width="@dimen/fav_star_width"
+                android:layout_height="@dimen/fav_star_width"
+                android:layout_marginStart="@dimen/layout_margin_1"
+                android:layout_marginEnd="@dimen/layout_margin_1"
+                android:src="@{user.isFav ? @drawable/star_fav : @drawable/star_no_fav}"
+                />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>
