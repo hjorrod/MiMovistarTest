@@ -96,10 +96,10 @@ class UsersListFragment :
 
     private fun sortUsersList(byName: Boolean, byGender: Boolean) {
         viewModel.sortBy(when {
-            byName && byGender -> SortBy.GENDER_NAME
-            byGender -> SortBy.GENDER
-            byName -> SortBy.NAME
-            else -> SortBy.NONE
+            byName && byGender -> SortType.GENDER_NAME
+            byGender -> SortType.GENDER
+            byName -> SortType.NAME
+            else -> SortType.NONE
         })
     }
 

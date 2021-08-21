@@ -33,7 +33,7 @@ class UsersListViewModel(
 
     private val _totalList = MutableLiveData<MutableList<UserVO>>()
 
-    private var sortBy: SortBy = SortBy.NONE
+    private var sortType: SortType = SortType.NONE
 
     private var isFilterEnabled : Boolean = false
 
@@ -44,9 +44,9 @@ class UsersListViewModel(
     val list = MediatorLiveData<MutableList<UserVO>>().apply {
         addSource(_usersList) {
             _totalList.value = _totalList.value.joinList(it)
-            when (sortBy) {
-                SortBy.NAME -> sortBy(SortBy.NAME, _totalList.value?.toMutableList())
-                SortBy.GENDER -> sortBy(SortBy.GENDER, _totalList.value?.toMutableList())
+            when (sortType) {
+                SortType.NAME -> sortBy(SortType.NAME, _totalList.value?.toMutableList())
+                SortType.GENDER -> sortBy(SortType.GENDER, _totalList.value?.toMutableList())
                 else -> {
                     if(_totalList.value?.isEmpty() == true) error.value = RandomCoApiException.EMPTY_RESULT
                     value = _totalList.value?.toMutableList()
@@ -124,18 +124,18 @@ class UsersListViewModel(
         updateList(_totalList.value?.toMutableList())
     }
 
-    fun sortBy(type: SortBy, listToSort: MutableList<UserVO>? = list.value) {
-        sortBy = type
+    fun sortBy(type: SortType, listToSort: MutableList<UserVO>? = list.value) {
+        sortType = type
         when(type) {
-            SortBy.NAME -> {
+            SortType.NAME -> {
                 listToSort?.sortBy { user-> user.name }
                 updateList(listToSort)
             }
-            SortBy.GENDER -> {
+            SortType.GENDER -> {
                 listToSort?.sortBy { user-> user.gender }
                 updateList(listToSort)
             }
-            SortBy.GENDER_NAME -> {
+            SortType.GENDER_NAME -> {
                 updateList(listToSort?.sortedWith(compareBy({ it.gender }, { it.name }))?.toMutableList())
             }
             else -> updateList(
@@ -158,7 +158,7 @@ class UsersListViewModel(
     fun isFilterEnabled(): Boolean = isFilterEnabled
 }
 
-enum class SortBy {
+enum class SortType {
     GENDER,
     NAME,
     GENDER_NAME,
