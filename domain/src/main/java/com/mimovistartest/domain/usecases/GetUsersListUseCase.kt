@@ -19,26 +19,30 @@ class GetUsersListUseCase(private val repository: IUsersRepository) :
 
     /** when we receive a new page, we check the response and mark as Fav if it corresponds **/
     private suspend fun findFavUsersAndRemoved(userPageBO: UserPageBO): Result<UserPageBO> {
-        val finalList = mutableListOf<UserBO>()
-        when (val response = repository.getLocaleUserList()) {
-            is Result.Success -> {
-                response.data.apply {
-                    forEach { localUser ->
-                        userPageBO.users.firstOrNull {
-                            it.email == localUser.email && localUser.isFav == 1
-                        }?.isFav = true
-                    }
-                    val removedList = filter { it.isRemoved == 1 }.toMutableList()
-                    userPageBO.users.forEach { user ->
-                        if (!removedList.any { it.email == user.email})
-                            finalList.add(user)
+        //1 - Sort list by name
+        userPageBO.users.sortedBy { it.name }.also { sortedList ->
+            val finalList = mutableListOf<UserBO>()
+            when (val response = repository.getLocaleUserList()) {
+                is Result.Success -> {
+                    response.data.apply {
+                        //2 - Find fav users and mark them
+                        forEach { localUser ->
+                            sortedList.firstOrNull {
+                                it.email == localUser.email && localUser.isFav == 1
+                            }?.isFav = true
+                        }
+                        //3 - Remove removed users from the final list
+                        val removedList = filter { it.isRemoved == 1 }.toMutableList()
+                        sortedList.forEach { user ->
+                            if (!removedList.any { it.email == user.email})
+                                finalList.add(user)
+                        }
                     }
                 }
+                is Result.Failure -> return Result.Success(UserPageBO(sortedList))
             }
-            is Result.Failure ->
-                return Result.Success(userPageBO)
+            return Result.Success(UserPageBO(finalList))
         }
-        return Result.Success(UserPageBO(finalList))
     }
 
     data class Params(
