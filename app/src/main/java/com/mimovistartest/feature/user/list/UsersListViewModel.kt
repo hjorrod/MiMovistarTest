@@ -12,6 +12,7 @@ import com.mimovistartest.domain.usecases.RemoveUserDBUseCase
 import com.mimovistartest.model.UserVO
 import com.mimovistartest.model.joinList
 import com.mimovistartest.model.map
+import com.mimovistartest.util.Constants
 
 class UsersListViewModel(
     private val getUsersListUseCase: GetUsersListUseCase,
@@ -68,7 +69,7 @@ class UsersListViewModel(
         loading(true)
         getUsersListUseCase.invoke(
             scope = viewModelScope,
-            params = GetUsersListUseCase.Params(40)
+            params = GetUsersListUseCase.Params(Constants.NUM_USER_REQUEST)
         ){ result ->
             when (result) {
                 is Result.Success -> _usersList.value = result.data.users.map()
@@ -110,7 +111,7 @@ class UsersListViewModel(
     /** update fav user in local database **/
     private fun updateFavDB(userVO: UserVO) {
         if (userVO.isFav)
-            insertUserToDB(userVO, isFav = 1)
+            insertUserToDB(userVO, isFav = Constants.USER_AS_FAV)
         else
             removeUserDBUseCase.invoke(
                 scope = viewModelScope,
@@ -131,7 +132,7 @@ class UsersListViewModel(
 
     /** delete user from the list and insert in local database to avoid be shown again to the user **/
     fun deleteUser(userVO: UserVO) {
-        insertUserToDB(userVO, isRemoved = 1)
+        insertUserToDB(userVO, isRemoved = Constants.USER_DELETED)
         _totalList.value?.remove(userVO)
         updateList(_totalList.value?.toMutableList())
     }
