@@ -30,7 +30,7 @@ Respecto al botón para cargar más usuarios, comentar que lo he implementado de
 
 Si el usuario quisiera ordenar por nombre la lista, deberá utilizar el checkBox superior habilitado para ello.
 
-Añadir, que tambiñen he implementado dos test para comprobar el buen funcionamiento de dos funciones que operan con listas.
+Añadir, que también he implementado dos test para comprobar el buen funcionamiento de dos funciones que operan con listas.
 
 Y por último, en cuanto al diseño en la tablet, comentar que se muestran 2 listas: una con los usuarios recibidos del servidor y otra con los marcados como favoritos. Cuando el usuario marque un usuario como favorito, dicho usuario será eliminado de la lista de usuarios y será añadido en la lista de favoritos. Y cuando desmarque un usuario como favorito de la lista de usuarios favoritos, será eliminado de esta lista y añadido a la lista de usuarios.
 
