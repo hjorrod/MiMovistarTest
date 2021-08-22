@@ -7,13 +7,11 @@ import com.mimovistartest.base.BaseViewHolder
 import com.mimovistartest.databinding.UserItemBinding
 import com.mimovistartest.model.UserVO
 import com.mimovistartest.util.OnFavStarClickListener
-import com.mimovistartest.util.OnLoadedListener
-import com.mimovistartest.util.OnRemoveClickListener
 import com.mimovistartest.util.OnUserClickListener
 
 class UserListTabletAdapter(
-    private val userClickListener: OnUserClickListener
-
+    private val userClickListener: OnUserClickListener,
+    private val favStarClickListener: OnFavStarClickListener
 ) : BaseAdapter<UserVO>() {
 
     override fun addDataSet(items: List<UserVO>) {
@@ -26,12 +24,20 @@ class UserListTabletAdapter(
                 LayoutInflater.from(parent.context), parent, false)
         )
 
+    override fun getItemId(position: Int): Long = dataSet[position].id.toLong()
+
     inner class UserViewHolder(
         private val binding: UserItemBinding
     ) : BaseViewHolder<UserVO>(binding) {
         override fun bind(item: UserVO) {
-            binding.user = item
-            binding.onClickListener = userClickListener
+            with(binding) {
+                user = item
+                onClickListener = userClickListener
+                onFavStarListener = favStarClickListener
+                //mark textView as selected to enable the text movement
+                userName.isSelected = true
+                userEmail.isSelected = true
+            }
         }
     }
 }

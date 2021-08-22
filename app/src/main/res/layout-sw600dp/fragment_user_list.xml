@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
         <import type="android.view.View" />
 
@@ -8,63 +9,73 @@
             type="com.mimovistartest.feature.user.list.UsersListTabletViewModel" />
     </data>
 
-   <androidx.constraintlayout.widget.ConstraintLayout
-       xmlns:app="http://schemas.android.com/apk/res-auto"
-       xmlns:tools="http://schemas.android.com/tools"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-       <View
-           android:id="@+id/view_center"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintEnd_toEndOf="parent"
-           app:layout_constraintTop_toTopOf="parent"
-           app:layout_constraintBottom_toBottomOf="parent"
-           android:layout_width="25dp"
-           android:layout_height="50dp"
-           android:background="@color/black"/>
+        <View
+            android:id="@+id/view_center"
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:background="@color/clear"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-       <LinearLayout
-           android:layout_width="0dp"
-           android:layout_height="match_parent"
-           app:layout_constraintTop_toTopOf="parent"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintEnd_toStartOf="@+id/view_center"
-           android:background="@color/colorPrimary"
-           android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/view_center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-       <androidx.recyclerview.widget.RecyclerView
-           android:id="@+id/user_list_tablet"
-           android:layout_width="match_parent"
-           android:layout_height="match_parent"
-           android:orientation="vertical"
-           app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-           android:layout_marginTop="@dimen/layout_margin_1"
-           android:layout_marginBottom="@dimen/layout_margin_1"
-           app:items="@{viewModelTablet.usersList}"
-           />
-       </LinearLayout>
+            <TextView
+                style="@style/TextRC.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/users_list_title" />
 
-       <LinearLayout
-           android:orientation="vertical"
-           android:layout_width="0dp"
-           android:layout_height="match_parent"
-           app:layout_constraintTop_toTopOf="parent"
-           app:layout_constraintStart_toEndOf="@+id/view_center"
-           app:layout_constraintEnd_toEndOf="parent"
-           android:background="@color/gray">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/user_list_tablet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/layout_margin_1"
+                android:layout_marginBottom="@dimen/layout_margin_1"
+                android:orientation="vertical"
+                app:items="@{viewModelTablet.usersList}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        </LinearLayout>
 
-           <androidx.recyclerview.widget.RecyclerView
-               android:id="@+id/fav_user_list_tablet"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:orientation="vertical"
-               app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-               android:layout_marginTop="@dimen/layout_margin_1"
-               android:layout_marginBottom="@dimen/layout_margin_1"
-               app:items="@{viewModelTablet.favList}"
-               />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/view_center"
+            app:layout_constraintTop_toTopOf="parent">
 
-       </LinearLayout>
-   </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                style="@style/TextRC.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fav_users_list_title" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fav_user_list_tablet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/layout_margin_1"
+                android:layout_marginBottom="@dimen/layout_margin_1"
+                android:orientation="vertical"
+                app:items="@{viewModelTablet.favList}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

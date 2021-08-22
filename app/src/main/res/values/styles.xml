@@ -1,10 +1,10 @@
 <resources>
     <!--Text appearance-->
-    <style name="TextCardView" parent="Widget.AppCompat.TextView">
+    <style name="TextRC" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/gray</item>
         <item name="android:singleLine">true</item>
     </style>
-    <style name="TextCardView.UserName">
+    <style name="TextRC.Title">
         <item name="android:textSize">@dimen/big_text</item>
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginStart">@dimen/text_padding</item>
@@ -12,7 +12,7 @@
         <item name="android:layout_marginBottom">@dimen/text_padding</item>
         <item name="android:textAllCaps">true</item>
     </style>
-    <style name="TextCardView.ExtraInfo">
+    <style name="TextRC.ExtraInfo">
         <item name="android:textSize">@dimen/medium_text</item>
         <item name="android:layout_marginStart">@dimen/text_padding</item>
     </style>
@@ -23,7 +23,7 @@
         <item name="android:layout_marginEnd">@dimen/layout_margin_2</item>
 
     </style>
-    <style name="TextCardView.LocationInfo">
+    <style name="TextRC.LocationInfo">
         <item name="android:textSize">@dimen/medium_text</item>
         <item name="android:layout_marginTop">@dimen/min_top_margin</item>
         <item name="android:layout_marginStart">@dimen/text_padding</item>

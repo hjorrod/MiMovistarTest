@@ -33,8 +33,12 @@ class UsersListTabletFragment :
                 userClickListener = { userVO ->
                     val directions = UsersListFragmentDirections.navigateToUserDetail(userVO)
                     findNavController().navigate(directions)
+                },
+                favStarClickListener = { userVO ->
+                    viewModel.handleFavEvent(userVO)
                 }
             )
+            adapter.setHasStableIds(true)
             userRV.adapter = adapter
 
             /** SnapHelper is a helper class that helps in snapping any child view of the RecyclerView. */
@@ -49,8 +53,12 @@ class UsersListTabletFragment :
                 userClickListener = { userVO ->
                     val directions = UsersListFragmentDirections.navigateToUserDetail(userVO)
                     findNavController().navigate(directions)
+                },
+                favStarClickListener = { userVO ->
+                    viewModel.handleFavEvent(userVO)
                 }
             )
+            adapter.setHasStableIds(true)
             favUserRV.adapter = adapter
 
             /** SnapHelper is a helper class that helps in snapping any child view of the RecyclerView. */

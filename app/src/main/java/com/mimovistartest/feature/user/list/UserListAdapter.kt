@@ -24,6 +24,8 @@ class UserListAdapter(
         loadListener.loadFinished()
     }
 
+    override fun getItemId(position: Int): Long = dataSet[position].id.toLong()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<UserVO> =
         UserViewHolder(
             UserItemBinding.inflate(
@@ -34,10 +36,15 @@ class UserListAdapter(
         private val binding: UserItemBinding
     ) : BaseViewHolder<UserVO>(binding) {
         override fun bind(item: UserVO) {
-            binding.user = item
-            binding.onClickListener = userClickListener
-            binding.onFavStarListener = favStarClickListener
-            binding.onRemoveListener = removeClickListener
+            with(binding) {
+                user = item
+                onClickListener = userClickListener
+                onFavStarListener = favStarClickListener
+                onRemoveListener = removeClickListener
+                //mark textView as selected to enable the text movement
+                userName.isSelected = true
+                userEmail.isSelected = true
+            }
         }
     }
 }

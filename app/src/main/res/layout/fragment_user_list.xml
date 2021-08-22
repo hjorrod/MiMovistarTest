@@ -10,10 +10,6 @@
         <variable
             name="loadMoreClicked"
             type="android.view.View.OnClickListener" />
-
-<!--        <variable-->
-<!--            name="filterClicked"-->
-<!--            type="android.view.View.OnClickListener" />-->
     </data>
 
     <RelativeLayout
@@ -79,17 +75,6 @@
             app:items="@{viewModel.list}"
             android:layout_below="@+id/layout_sort"
             android:layout_above="@id/load_more_button"/>
-
-<!--        <CheckBox-->
-<!--            android:id="@+id/cb_filter_by_fav"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            style="@style/ChechBoxSort"-->
-<!--            android:text="@string/filter_by_fav"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_centerHorizontal="true"-->
-<!--            android:visibility="@{viewModel.scrollCompleted ? View.GONE : (viewModel.loadingIndicator ? View.GONE : View.VISIBLE)}"-->
-<!--            />-->
 
         <Button
             android:id="@+id/load_more_button"

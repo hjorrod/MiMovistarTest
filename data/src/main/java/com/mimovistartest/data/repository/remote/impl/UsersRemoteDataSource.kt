@@ -14,7 +14,7 @@ class UsersRemoteDataSource(private val randomCoApi: RandomCoApi) :
     IUsersRemoteDataSource {
     override suspend fun getUsersList(pageNumber: Int?): Result<UserPageDTO> {
         val response = randomCoApi.getUsers(pageNumber)
-        Log.d("randomCo", " response ${response.isSuccessful} - ${response.errorBody()}")
+        Log.d("randomCo", " response ${response.isSuccessful} - ${response.errorBody()} - ${response.body()} - ${response.message()} - $response")
         if(response.isSuccessful) {
             response.body()?.let {
                 return if (it.users.isEmpty())
@@ -25,7 +25,7 @@ class UsersRemoteDataSource(private val randomCoApi: RandomCoApi) :
                 return Result.Failure(exception = RandomCoApiException(RandomCoApiException.EMPTY_RESULT))
             }
         }
-        return Result.Failure(ServiceError(ServiceErrorInfo("Fail to get users page")), RandomCoApiException(RandomCoApiException.UNKNOWN))
+        return Result.Failure(ServiceError(ServiceErrorInfo("Fail to get random users")), RandomCoApiException(RandomCoApiException.UNKNOWN))
     }
 
     private fun getUniqueUserList(usersList: List<UserDTO>): List<UserDTO> {

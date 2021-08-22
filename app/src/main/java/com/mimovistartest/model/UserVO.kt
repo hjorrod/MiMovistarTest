@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 class UserVO (
+    val id: Int,
     val gender: String,
     val name: String,
     val email: String,

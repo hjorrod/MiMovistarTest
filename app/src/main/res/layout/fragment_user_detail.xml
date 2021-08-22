@@ -45,10 +45,9 @@
 
         <TextView
             android:id="@+id/detail_user_name"
-            style="@style/TextCardView.UserName"
+            style="@style/TextRC.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
             android:paddingTop="@dimen/layout_margin_1"
             android:text="@{user.name}"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +66,7 @@
 
             <TextView
                 android:id="@+id/detail_contact_title"
-                style="@style/TextCardView.UserName"
+                style="@style/TextRC.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_title"
@@ -75,22 +74,20 @@
 
             <TextView
                 android:id="@+id/detail_user_email"
-                style="@style/TextCardView.ExtraInfo"
+                style="@style/TextRC.ExtraInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{user.email}"
                 android:layout_below="@id/detail_contact_title"
-                android:ellipsize="end"
                 tools:text="Email" />
 
             <TextView
                 android:id="@+id/detail_user_phone"
-                style="@style/TextCardView.ExtraInfo"
+                style="@style/TextRC.ExtraInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/detail_user_email"
                 android:text='@{"Phone: " + user.phone}'
-                android:ellipsize="end"
                 tools:text="Phone" />
         </RelativeLayout>
 
@@ -105,7 +102,7 @@
 
             <TextView
                 android:id="@+id/detail_location_title"
-                style="@style/TextCardView.UserName"
+                style="@style/TextRC.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/location_title"
@@ -113,42 +110,38 @@
 
             <TextView
                 android:id="@+id/detail_location_street"
-                style="@style/TextCardView.LocationInfo"
+                style="@style/TextRC.LocationInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_location_title"
-                android:ellipsize="end"
                 android:text="@{user.location.street}"
                 tools:text="Avenida Adelina, 42" />
 
             <TextView
                 android:id="@+id/detail_location_city"
-                style="@style/TextCardView.LocationInfo"
+                style="@style/TextRC.LocationInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_location_street"
                 android:text="@{user.location.city}"
-                android:ellipsize="end"
                 tools:text="Madrid" />
 
             <TextView
                 android:id="@+id/detail_location_state"
-                style="@style/TextCardView.LocationInfo"
+                style="@style/TextRC.LocationInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/detail_location_city"
                 android:text="@{user.location.state}"
-                android:ellipsize="end"
                 tools:text="España" />
         </RelativeLayout>
 
         <TextView
             android:id="@+id/detail_registered_date_text"
-            style="@style/TextCardView.LocationInfo"
+            style="@style/TextRC.LocationInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/layout_margin_2"
-            android:ellipsize="end"
             android:text='@{"Registered date: " + user.registeredDate}'
             app:layout_constraintBottom_toTopOf="@+id/layout_detail_fav"
             app:layout_constraintStart_toStartOf="@id/layout_detail_fav"
@@ -168,10 +161,9 @@
 
             <TextView
                 android:id="@+id/detail_fav_text"
-                style="@style/TextCardView.LocationInfo"
+                style="@style/TextRC.LocationInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:text='@string/fav_text'
                 tools:text="Included in your favourite users:" />
 

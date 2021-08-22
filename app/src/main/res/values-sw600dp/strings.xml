@@ -10,8 +10,8 @@
     <string name="filter_by_fav">Show only Fav</string>
     <string name="fav_text">Included in your favourite users:</string>
     <string name="location_title">Location</string>
+    <string name="device_type">tablet</string>
     <string name="contact_title">Contact</string>
-    <string name="device_type">phone</string>
     <string name="users_list_title">Users List</string>
     <string name="fav_users_list_title">Favorites Users List</string>
 </resources>

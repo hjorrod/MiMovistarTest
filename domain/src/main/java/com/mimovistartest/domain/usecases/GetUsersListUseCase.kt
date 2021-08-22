@@ -17,7 +17,11 @@ class GetUsersListUseCase(private val repository: IUsersRepository) :
         }
     }
 
-    /** when we receive a new page, we check the response and mark as Fav if it corresponds **/
+    /** when we receive a new random users list, we check the response and:
+     *  sort the list by name
+     *  mark as Fav if it corresponds
+     *  delete user from the list if it was deleted by the user previously
+     **/
     private suspend fun findFavUsersAndRemoved(userPageBO: UserPageBO): Result<UserPageBO> {
         //1 - Sort list by name
         userPageBO.users.sortedBy { it.name }.also { sortedList ->

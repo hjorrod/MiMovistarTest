@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/user_list_fragment">
+    <fragment
+        android:id="@+id/user_list_fragment"
+        android:name="com.mimovistartest.feature.user.list.UsersListTabletFragment"
+        android:label="Main">
+        <action
+            android:id="@+id/navigate_to_user_detail"
+            app:destination="@id/detail_fragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/detail_fragment"
+        android:name="com.mimovistartest.feature.user.detail.UserDetailFragment"
+        android:label="User Detail">
+        <argument
+            android:name="userVO"
+            app:argType="com.mimovistartest.model.UserVO" />
+    </fragment>
+</navigation>

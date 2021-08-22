@@ -50,6 +50,7 @@ class UsersListFragment :
                     viewModel.deleteUser(it)
                 }
             )
+            adapter.setHasStableIds(true)
             rV.adapter = adapter
 
             /** add listener to handle when show the Load_More button to load more users **/
