@@ -4,5 +4,5 @@ import com.mimovistartest.data.model.UserPageDTO
 import com.mimovistartest.data.util.Result
 
 interface IUsersRemoteDataSource {
-    suspend fun getUsersList(pageNumber: Int?): Result<UserPageDTO>
+    suspend fun getUsersList(count: Int?): Result<UserPageDTO>
 }

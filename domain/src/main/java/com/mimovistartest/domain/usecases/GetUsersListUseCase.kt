@@ -1,5 +1,6 @@
 package com.mimovistartest.domain.usecases
 
+import com.mimovistartest.data.entities.UserEntity
 import com.mimovistartest.data.repository.IUsersRepository
 import com.mimovistartest.data.util.Result
 import com.mimovistartest.domain.common.UseCase
@@ -11,7 +12,7 @@ class GetUsersListUseCase(private val repository: IUsersRepository) :
     UseCase<GetUsersListUseCase.Params, Result<UserPageBO>>() {
 
     override suspend fun run(params: Params): Result<UserPageBO> {
-        return when (val response = repository.getUsersList(params.pageNumber)) {
+        return when (val response = repository.getUsersList(params.count)) {
             is Result.Success -> findFavUsersAndRemoved(response.data.map())
             is Result.Failure -> Result.Failure(response.error, response.exception)
         }
@@ -25,7 +26,6 @@ class GetUsersListUseCase(private val repository: IUsersRepository) :
     private suspend fun findFavUsersAndRemoved(userPageBO: UserPageBO): Result<UserPageBO> {
         //1 - Sort list by name
         userPageBO.users.sortedBy { it.name }.also { sortedList ->
-            val finalList = mutableListOf<UserBO>()
             when (val response = repository.getLocaleUserList()) {
                 is Result.Success -> {
                     response.data.apply {
@@ -35,21 +35,30 @@ class GetUsersListUseCase(private val repository: IUsersRepository) :
                                 it.email == localUser.email && localUser.isFav == 1
                             }?.isFav = true
                         }
-                        //3 - Remove removed users from the final list
+                        //3 - Remove removed users to the final list
                         val removedList = filter { it.isRemoved == 1 }.toMutableList()
-                        sortedList.forEach { user ->
-                            if (!removedList.any { it.email == user.email})
-                                finalList.add(user)
-                        }
+                        
+                        return Result.Success(UserPageBO(findUsersAndDelete(removedList, sortedList)))
                     }
                 }
                 is Result.Failure -> return Result.Success(UserPageBO(sortedList))
             }
-            return Result.Success(UserPageBO(finalList))
         }
     }
 
+    fun findUsersAndDelete(
+        removedList: MutableList<UserEntity>,
+        originalList: List<UserBO>
+    ): MutableList<UserBO> {
+        val finalList = mutableListOf<UserBO>()
+        originalList.forEach { user ->
+            if (!removedList.any { it.email == user.email })
+                finalList.add(user)
+        }
+        return finalList
+    }
+
     data class Params(
-        val pageNumber: Int? = null
+        val count: Int? = null
     )
 }

@@ -9,6 +9,6 @@ interface RandomCoApi {
 
     @GET(".")
     suspend fun getUsers(
-        @Query ("results") page: Int? = null): Response<UserPageDTOWrapper>
+        @Query ("results") count: Int? = null): Response<UserPageDTOWrapper>
 
 }

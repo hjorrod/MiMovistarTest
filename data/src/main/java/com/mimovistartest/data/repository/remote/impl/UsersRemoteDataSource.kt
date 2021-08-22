@@ -12,8 +12,8 @@ import com.mimovistartest.data.util.Result
 
 class UsersRemoteDataSource(private val randomCoApi: RandomCoApi) :
     IUsersRemoteDataSource {
-    override suspend fun getUsersList(pageNumber: Int?): Result<UserPageDTO> {
-        val response = randomCoApi.getUsers(pageNumber)
+    override suspend fun getUsersList(count: Int?): Result<UserPageDTO> {
+        val response = randomCoApi.getUsers(count)
         Log.d("randomCo", " response ${response.isSuccessful} - ${response.errorBody()} - ${response.body()} - ${response.message()} - $response")
         if(response.isSuccessful) {
             response.body()?.let {
@@ -28,7 +28,7 @@ class UsersRemoteDataSource(private val randomCoApi: RandomCoApi) :
         return Result.Failure(ServiceError(ServiceErrorInfo("Fail to get random users")), RandomCoApiException(RandomCoApiException.UNKNOWN))
     }
 
-    private fun getUniqueUserList(usersList: List<UserDTO>): List<UserDTO> {
+    fun getUniqueUserList(usersList: List<UserDTO>): List<UserDTO> {
         //Note: distinct by email because email must be unique
         return usersList.distinctBy { it.email }.toList().sortedBy { it.name.name }
     }
