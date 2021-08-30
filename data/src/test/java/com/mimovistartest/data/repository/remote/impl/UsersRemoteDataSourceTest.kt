@@ -2,16 +2,13 @@ package com.mimovistartest.data.repository.remote.impl
 
 import com.mimovistartest.data.api.RandomCoApi
 import com.mimovistartest.data.model.*
+import com.nhaarman.mockitokotlin2.mock
 import org.junit.Assert.*
 import org.junit.Test
-import retrofit2.Response
 
 class UsersRemoteDataSourceTest {
-    private val test: UsersRemoteDataSource = UsersRemoteDataSource(object : RandomCoApi {
-        override suspend fun getUsers(count: Int?): Response<UserPageDTOWrapper> {
-            return Response.success(UserPageDTOWrapper())
-        }
-    })
+    private val api: RandomCoApi = mock()
+    private val test: UsersRemoteDataSource = UsersRemoteDataSource(api)
 
     @Test
     fun testGetUniqueUserList() {
