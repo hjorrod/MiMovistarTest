@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1073909517976",
+    "firebase_url": "https://hjorrod-ad7a8-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "hjorrod-ad7a8",
+    "storage_bucket": "hjorrod-ad7a8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073909517976:android:cd5a29fb3b0c9986684aed",
+        "android_client_info": {
+          "package_name": "com.mimovistartest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1073909517976-5ol414v36vvn6o1j0qm479getb5r16q9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYdtYP1cWvR8tIWTVC0XO9QYT6dar5QSc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1073909517976-5ol414v36vvn6o1j0qm479getb5r16q9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

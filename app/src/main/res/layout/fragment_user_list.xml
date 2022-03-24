@@ -20,7 +20,7 @@
         android:orientation="vertical"
         android:background="@color/blue"
         tools:context=".feature.user.list.UserListFragment">
-        
+
         <EditText
             android:id="@+id/et_search"
             android:layout_width="match_parent"
@@ -117,5 +117,27 @@
                 android:indeterminateTint="@color/white" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@color/white">
+
+            <Button
+                android:id="@+id/botonprueba"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SUBIR"
+                android:layout_marginBottom="50dp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageViewprueba"
+                android:background="@color/blue"
+                android:src="@drawable/mimovistartest_logo"/>
+        </LinearLayout>
     </RelativeLayout>
 </layout>

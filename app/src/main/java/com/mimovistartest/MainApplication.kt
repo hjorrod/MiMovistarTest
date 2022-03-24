@@ -1,6 +1,8 @@
 package com.mimovistartest
 
 import android.app.Application
+import android.util.Log
+import com.google.firebase.FirebaseApp
 import com.mimovistartest.di.viewModelModule
 import com.mimovistartest.data.di.*
 import com.mimovistartest.domain.di.useCaseModule
@@ -26,5 +28,11 @@ open class MainApplication : Application(){
             )
             loadKoinModules(moduleList)
         }
+        initFirebase()
+    }
+
+    private fun initFirebase() {
+        Log.d("elfoco", " init Firebase")
+        FirebaseApp.initializeApp(this)
     }
 }
