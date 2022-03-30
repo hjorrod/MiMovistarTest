@@ -1,6 +1,8 @@
 package com.mimovistartest.feature.user.list
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.firebase.FirebaseApp
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.mimovistartest.R
@@ -20,6 +23,7 @@ import com.mimovistartest.base.BaseFragment
 import com.mimovistartest.databinding.FragmentUserListBinding
 import com.mimovistartest.util.*
 import org.koin.android.ext.android.bind
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -180,9 +184,32 @@ class UsersListFragment :
             .addSnapshotListener { value, error ->
                 Log.d("elfoco", "database change")
             }
+
+        binding.imageViewprueba?.isDrawingCacheEnabled = true
+        binding.imageViewprueba?.buildDrawingCache()
+        val bitmap = (binding.imageViewprueba?.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        val foodBis = imagesRef.child("foodBis.jpg")
+
+        val uploadTask = foodBis.putBytes(data)
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+            Log.d("elfoco", " fichero subido desde imageView con error $it - ${it.message} - ${it.localizedMessage} - ${it.cause}")
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            // ...
+            Log.d("elfoco", " fichero subido con exito desde imageView")
+        }
+
+        val dRef = FirebaseDatabase.getInstance().reference
+        dRef.child("users").child("miles").setValue(UserBis())
+
     }
 
     data class City (val name: String =  "Getafe", val country: String = "Spain")
+    data class UserBis (val name: String =  "Michael", val first: String = "Miles", val born: Int = 1990)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
