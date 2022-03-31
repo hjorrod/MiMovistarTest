@@ -11,6 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -43,13 +44,7 @@ class UsersListFragment :
         setUpView()
     }
 
-
     private fun setUpView() {
-        binding.botonprueba?.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, 1)
-        }
         binding.userList?.visibility = View.GONE
 
         //Set up the recycler view
@@ -136,29 +131,53 @@ class UsersListFragment :
 
     override fun onResume() {
         super.onResume()
+        startTestFirebaseDatabase()
+    }
+
+    private var handlerSearch = Handler(Looper.getMainLooper())
+    private val runnableSearch = Runnable {
+        viewModel.searchByNameOrEmail(binding.etSearch?.text?.toString() ?: "")
+    }
+
+    /**
+     * INICIO PRUEBAS FIREBASE - STORAGE - DATABASE
+     */
+
+    private fun startTestFirebaseDatabase() {
+        // CREATE ACTION FOR BUTTON
+        binding.botonprueba?.setOnClickListener {
+            Intent(Intent.ACTION_PICK).also { intent ->
+                intent.type = "image/*"
+                galleryActivityResult.launch(intent)
+            }
+        }
 
         Log.d("elfoco", " apsp ${ FirebaseApp.getApps(requireContext())}")
 
+        // STORAGE
         val storageRef = FirebaseStorage.getInstance().reference
         val imagesRef = storageRef.child("images")
-        val foodRef = imagesRef.child("food2.jpg")
-        val path = Uri.parse("android.resource://com.movistartest/assets/food.jpg")// + R.drawable.mimovistartest_logo)
-        val file = Uri.fromFile(File("C:Users/jorge/AndroidStudioProjects/MiMovistarTest/app/food.jpg"))
-        val fileBis = Uri.fromFile(File(path.path))
-        Log.d("elfoco", " subiendo fichero ${file.path} - $path")
-        foodRef.putFile(fileBis).addOnSuccessListener {
-            Log.d("elfoco", " fichero subido con exito")
-        }.addOnFailureListener{
-            Log.d("elfoco", " fichero subido con error $it - ${it.message} - ${it.localizedMessage} - ${it.cause}")
-        }
-        val uri = storageRef.child("images/food.jpg").downloadUrl.addOnSuccessListener {
-            Log.d("elfoco", " fichero descargado con exito ${it.path}")
-            it.path
-        }.addOnFailureListener {
-            Log.d("elfoco", " fichero descargado con error")
+
+        //Upload from memory (imageView)
+        binding.imageViewprueba?.isDrawingCacheEnabled = true
+        binding.imageViewprueba?.buildDrawingCache()
+        val bitmap = (binding.imageViewprueba?.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        val foodBis = imagesRef.child("foodBis.jpg")
+
+        val uploadTask = foodBis.putBytes(data)
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+            Log.d("elfoco", " fichero subido desde imageView con error $it - ${it.message} - ${it.localizedMessage} - ${it.cause}")
+        }.addOnSuccessListener { taskSnapshot ->
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            // ...
+            Log.d("elfoco", " fichero subido con exito desde imageView")
         }
 
-
+        // FIRESTORE
         val databaseRef = FirebaseFirestore.getInstance()
         databaseRef.collection("cities").document("Getafe")
             .set(City("Leganés", "España"))
@@ -185,36 +204,18 @@ class UsersListFragment :
                 Log.d("elfoco", "database change")
             }
 
-        binding.imageViewprueba?.isDrawingCacheEnabled = true
-        binding.imageViewprueba?.buildDrawingCache()
-        val bitmap = (binding.imageViewprueba?.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-        val foodBis = imagesRef.child("foodBis.jpg")
-
-        val uploadTask = foodBis.putBytes(data)
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-            Log.d("elfoco", " fichero subido desde imageView con error $it - ${it.message} - ${it.localizedMessage} - ${it.cause}")
-        }.addOnSuccessListener { taskSnapshot ->
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            // ...
-            Log.d("elfoco", " fichero subido con exito desde imageView")
-        }
-
+        // REALTIME DATABASE
         val dRef = FirebaseDatabase.getInstance().reference
         dRef.child("users").child("miles").setValue(UserBis())
-
     }
 
     data class City (val name: String =  "Getafe", val country: String = "Spain")
     data class UserBis (val name: String =  "Michael", val first: String = "Miles", val born: Int = 1990)
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val imageFile = data?.data
-        val imagePath = data?.data?.lastPathSegment?.split("/")?.last() ?: "hola"
+    private val galleryActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        // Storage upload from mobile gallery
+        val imageFile = result.data?.data
+        val imagePath = result.data?.data?.lastPathSegment?.split("/")?.last() ?: "hola"
         val storageRef = FirebaseStorage.getInstance().reference
         val imagesRef = storageRef.child("images")
         val foodRef = imagesRef.child(imagePath)
@@ -227,8 +228,7 @@ class UsersListFragment :
         }
     }
 
-    private var handlerSearch = Handler(Looper.getMainLooper())
-    private val runnableSearch = Runnable {
-        viewModel.searchByNameOrEmail(binding.etSearch?.text?.toString() ?: "")
-    }
+    /**
+     * FIN PRUEBAS FIREBASE - STORAGE - DATABASE
+     */
 }
