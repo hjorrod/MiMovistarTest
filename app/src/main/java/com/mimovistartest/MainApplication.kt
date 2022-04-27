@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseApp
 import com.mimovistartest.di.viewModelModule
 import com.mimovistartest.data.di.*
 import com.mimovistartest.domain.di.useCaseModule
+import dev.skomlach.biometric.compat.BiometricPromptCompat
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.loadKoinModules
@@ -29,6 +30,7 @@ open class MainApplication : Application(){
             loadKoinModules(moduleList)
         }
         initFirebase()
+        BiometricPromptCompat.Companion.init(null)
     }
 
     private fun initFirebase() {

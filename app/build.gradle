@@ -6,12 +6,12 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: "com.google.gms.google-services"
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
     buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "com.mimovistartest"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -95,6 +95,9 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation "androidx.cardview:cardview:1.0.0"
+
+    //Biometric library
+    implementation 'dev.skomlach:biometric:2.0.90'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
