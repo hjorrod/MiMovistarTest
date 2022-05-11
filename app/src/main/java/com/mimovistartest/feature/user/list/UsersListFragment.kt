@@ -138,9 +138,9 @@ class UsersListFragment :
         super.onResume()
         //startTestFirebaseDatabase()
         //startBioAuth()
-        /*Handler(Looper.getMainLooper()).postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             startMyBioAuth()
-        }, 1500L)*/
+        }, 1500L)
     }
 
     private var handlerSearch = Handler(Looper.getMainLooper())
