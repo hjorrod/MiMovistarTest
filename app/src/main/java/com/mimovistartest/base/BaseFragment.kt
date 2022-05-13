@@ -9,16 +9,24 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.mimovistartest.BR
 import com.mimovistartest.R
 import com.mimovistartest.util.OnShowErrorListener
 import kotlin.reflect.KClass
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(viewModelClass: KClass<V>) :
+//@AndroidEntryPoint
+abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(val viewModelClass: KClass<V>) :
     Fragment() {
 
-    protected val viewModel: V by viewModel(viewModelClass)
+    //protected val viewModel: V by viewModel(viewModelClass)
+    //@Inject
+    //protected lateinit var viewModel: V
+    //private val viewModel: V by viewModels<viewModelClass>()
+    protected open val viewModel: BaseViewModel by viewModels()
+
     protected lateinit var binding: T
     private var showErrorListener: OnShowErrorListener? = null
 
@@ -63,7 +71,9 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(viewModelCla
     abstract fun getLayoutId(): Int
 
     open fun init() {}
-    open fun observeViewModel() {}
+    open fun observeViewModel() {
+        //viewModel = ViewModelProviders.of(this, viewModelFactory).get(viewModelClass)
+    }
     open fun getBundleArguments() {}
     open fun addBindingVariables() {}
     open fun onScreenRotated(savedInstanceState: Bundle) { }

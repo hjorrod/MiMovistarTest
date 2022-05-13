@@ -8,17 +8,21 @@ import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.mimovistartest.R
 import com.mimovistartest.base.BaseFragment
 import com.mimovistartest.databinding.FragmentUserListBinding
 import com.mimovistartest.util.StartSnapHelper
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UsersListTabletFragment :
     BaseFragment<FragmentUserListBinding, UsersListTabletViewModel>(UsersListTabletViewModel::class) {
     override fun getLayoutId(): Int = R.layout.fragment_user_list
 
+    override val viewModel: UsersListTabletViewModel by viewModels()
 
     override fun init() {
         super.init()

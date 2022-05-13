@@ -5,8 +5,9 @@ import com.mimovistartest.data.model.*
 import com.mimovistartest.data.repository.remote.IUsersRemoteDataSource
 import com.mimovistartest.data.repository.local.ILocalDataSource
 import com.mimovistartest.data.util.Result
+import javax.inject.Inject
 
-class UsersRepository (
+class UsersRepository @Inject constructor (
     private val local: ILocalDataSource,
     private val remote: IUsersRemoteDataSource
 ) : IUsersRepository {

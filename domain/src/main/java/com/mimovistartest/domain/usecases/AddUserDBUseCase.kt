@@ -3,8 +3,9 @@ package com.mimovistartest.domain.usecases
 import com.mimovistartest.data.entities.UserEntity
 import com.mimovistartest.data.repository.IUsersRepository
 import com.mimovistartest.domain.common.UseCaseNoResult
+import javax.inject.Inject
 
-class AddUserDBUseCase(private val repository: IUsersRepository)
+class AddUserDBUseCase @Inject constructor (private val repository: IUsersRepository)
     : UseCaseNoResult<AddUserDBUseCase.Params>(){
 
     override suspend fun run(params: Params) = with(params) {

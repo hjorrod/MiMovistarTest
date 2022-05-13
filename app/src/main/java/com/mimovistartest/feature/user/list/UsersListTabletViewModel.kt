@@ -7,8 +7,11 @@ import com.mimovistartest.data.util.Result
 import com.mimovistartest.domain.usecases.GetUsersListUseCase
 import com.mimovistartest.model.UserVO
 import com.mimovistartest.model.map
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UsersListTabletViewModel(
+@HiltViewModel
+class UsersListTabletViewModel @Inject constructor (
     private val getUsersListUseCase: GetUsersListUseCase
 ) : BaseViewModel() {
 

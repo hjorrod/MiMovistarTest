@@ -7,8 +7,9 @@ import com.mimovistartest.domain.common.UseCase
 import com.mimovistartest.domain.model.UserBO
 import com.mimovistartest.domain.model.UserPageBO
 import com.mimovistartest.domain.model.map
+import javax.inject.Inject
 
-class GetUsersListUseCase(private val repository: IUsersRepository) :
+class GetUsersListUseCase @Inject constructor (private val repository: IUsersRepository) :
     UseCase<GetUsersListUseCase.Params, Result<UserPageBO>>() {
 
     override suspend fun run(params: Params): Result<UserPageBO> {

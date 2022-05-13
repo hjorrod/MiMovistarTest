@@ -1,11 +1,13 @@
 package com.mimovistartest.data.repository.local.impl
 
+
 import com.mimovistartest.data.entities.UserEntity
 import com.mimovistartest.data.repository.local.UserDao
 import com.mimovistartest.data.repository.local.ILocalDataSource
 import com.mimovistartest.data.util.Result
+import javax.inject.Inject
 
-class LocalDataSource(
+class LocalDataSource @Inject constructor (
     private val userDao: UserDao
 ) : ILocalDataSource {
     override fun getLocaleUserList(): Result<List<UserEntity>> {

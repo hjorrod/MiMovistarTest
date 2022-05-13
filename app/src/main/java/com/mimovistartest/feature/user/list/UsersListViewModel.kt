@@ -13,8 +13,11 @@ import com.mimovistartest.model.UserVO
 import com.mimovistartest.model.joinList
 import com.mimovistartest.model.map
 import com.mimovistartest.util.Constants
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class UsersListViewModel(
+@HiltViewModel
+class UsersListViewModel @Inject constructor(
     private val getUsersListUseCase: GetUsersListUseCase,
     private val addUserDBUseCase: AddUserDBUseCase,
     private val removeUserDBUseCase: RemoveUserDBUseCase

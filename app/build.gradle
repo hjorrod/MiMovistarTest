@@ -4,10 +4,13 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: "com.google.gms.google-services"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 32
     buildToolsVersion "29.0.3"
+
     defaultConfig {
         applicationId "com.mimovistartest"
         minSdkVersion 21
@@ -16,9 +19,11 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     dataBinding {
         enabled = true
     }
+
     buildTypes {
         release {
             // Enables code shrinking, obfuscation, and optimization for only
@@ -98,6 +103,10 @@ dependencies {
 
     //Biometric library
     implementation 'dev.skomlach:biometric:2.0.90'
+
+    //Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

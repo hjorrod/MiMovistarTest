@@ -3,19 +3,19 @@ package com.mimovistartest
 import android.app.Application
 import android.util.Log
 import com.google.firebase.FirebaseApp
-import com.mimovistartest.di.viewModelModule
 import com.mimovistartest.data.di.*
-import com.mimovistartest.domain.di.useCaseModule
+import dagger.hilt.android.HiltAndroidApp
 import dev.skomlach.biometric.compat.BiometricPromptCompat
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
 
+@HiltAndroidApp
 open class MainApplication : Application(){
     override fun onCreate() {
         super.onCreate()
-        startKoin {
+        /*startKoin {
             androidLogger()
             androidContext(this@MainApplication)
             val moduleList = listOf(
@@ -28,7 +28,7 @@ open class MainApplication : Application(){
                 viewModelModule
             )
             loadKoinModules(moduleList)
-        }
+        }*/
         initFirebase()
         BiometricPromptCompat.Companion.init(null)
     }

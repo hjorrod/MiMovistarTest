@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -31,11 +32,23 @@ import dev.skomlach.biometric.compat.*
 import org.koin.android.ext.android.bind
 import java.io.ByteArrayOutputStream
 import java.io.File
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class UsersListFragment :
     BaseFragment<FragmentUserListBinding, UsersListViewModel>(UsersListViewModel::class) {
     override fun getLayoutId(): Int = R.layout.fragment_user_list
+
+    override val viewModel: UsersListViewModel by viewModels()
+
+    @Inject
+    lateinit var firebaseStorage: FirebaseStorage
+
+    @Inject
+    lateinit var firebaseFirestore: FirebaseFirestore
+    @Inject
+    lateinit var firebaseDatabase: FirebaseDatabase
 
     override fun addBindingVariables() {
         super.addBindingVariables()
@@ -136,11 +149,11 @@ class UsersListFragment :
 
     override fun onResume() {
         super.onResume()
-        //startTestFirebaseDatabase()
+        startTestFirebaseDatabase()
         //startBioAuth()
-        Handler(Looper.getMainLooper()).postDelayed({
+        /*Handler(Looper.getMainLooper()).postDelayed({
             startMyBioAuth()
-        }, 1500L)
+        }, 1500L)*/
     }
 
     private var handlerSearch = Handler(Looper.getMainLooper())
@@ -301,7 +314,7 @@ class UsersListFragment :
         Log.d("elfoco", " apsp ${ FirebaseApp.getApps(requireContext())}")
 
         // STORAGE
-        val storageRef = FirebaseStorage.getInstance().reference
+        val storageRef = firebaseStorage.reference
         val imagesRef = storageRef.child("images")
 
         //Upload from memory (imageView)
@@ -324,8 +337,7 @@ class UsersListFragment :
         }
 
         // FIRESTORE
-        val databaseRef = FirebaseFirestore.getInstance()
-        databaseRef.collection("cities").document("Getafe")
+        firebaseFirestore.collection("cities").document("Getafe")
             .set(City("Leganés", "España"))
             .addOnSuccessListener {
                 Log.d("elfoco", " base de datos escrita con exito")
@@ -333,7 +345,7 @@ class UsersListFragment :
                 Log.d("elfoco", " base de datos escrita con error")
             }
 
-        databaseRef.collection("cities")
+        firebaseFirestore.collection("cities")
             .whereEqualTo("country", "España")
             .get()
             .addOnSuccessListener { documents ->
@@ -345,13 +357,13 @@ class UsersListFragment :
                 Log.w("elfoco", "Error getting documents: ", exception)
             }
 
-        databaseRef.collection("cities")
+        firebaseFirestore.collection("cities")
             .addSnapshotListener { value, error ->
                 Log.d("elfoco", "database change")
             }
 
         // REALTIME DATABASE
-        val dRef = FirebaseDatabase.getInstance().reference
+        val dRef = firebaseDatabase.reference
         dRef.child("users").child("miles").setValue(UserBis())
     }
 
@@ -362,7 +374,7 @@ class UsersListFragment :
         // Storage upload from mobile gallery
         val imageFile = result.data?.data
         val imagePath = result.data?.data?.lastPathSegment?.split("/")?.last() ?: "hola"
-        val storageRef = FirebaseStorage.getInstance().reference
+        val storageRef = firebaseStorage.reference
         val imagesRef = storageRef.child("images")
         val foodRef = imagesRef.child(imagePath)
         if (imageFile != null) {
