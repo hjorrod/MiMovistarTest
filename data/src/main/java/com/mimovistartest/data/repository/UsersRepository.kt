@@ -5,6 +5,8 @@ import com.mimovistartest.data.model.*
 import com.mimovistartest.data.repository.remote.IUsersRemoteDataSource
 import com.mimovistartest.data.repository.local.ILocalDataSource
 import com.mimovistartest.data.util.Result
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class UsersRepository @Inject constructor (
@@ -12,11 +14,11 @@ class UsersRepository @Inject constructor (
     private val remote: IUsersRemoteDataSource
 ) : IUsersRepository {
 
-    override suspend fun getUsersList(count: Int?): Result<UserPageDTO> {
-        return when (val remoteUsers = remote.getUsersList(count)) {
-            is Result.Success -> Result.Success(remoteUsers.data)
-            is Result.Failure -> Result.Failure(remoteUsers.error,
-                remoteUsers.exception)
+    override suspend fun getUsersList(count: Int?): Flow<Result<UserPageDTO>> = flow {
+        when (val remoteUsers = remote.getUsersList(count)) {
+            is Result.Success -> emit(Result.Success(remoteUsers.data))
+            is Result.Failure -> emit(Result.Failure<UserPageDTO>(remoteUsers.error,
+                remoteUsers.exception))
         }
     }
 

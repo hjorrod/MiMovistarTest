@@ -38,6 +38,19 @@ android {
         }
     }
 
+    flavorDimensions "environment"
+    productFlavors {
+        firebaseTest {
+            dimension "environment"
+            buildConfigField "Boolean", "SHOW_TEST_FIREBASE_BUTTON", "true"
+        }
+        production {
+            dimension "environment"
+
+            buildConfigField "Boolean", "SHOW_TEST_FIREBASE_BUTTON", "false"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

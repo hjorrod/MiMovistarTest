@@ -1,5 +1,6 @@
 package com.mimovistartest.feature.user.list
 
+import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.mimovistartest.model.joinList
 import com.mimovistartest.model.map
 import com.mimovistartest.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +23,7 @@ class UsersListViewModel @Inject constructor(
     private val getUsersListUseCase: GetUsersListUseCase,
     private val addUserDBUseCase: AddUserDBUseCase,
     private val removeUserDBUseCase: RemoveUserDBUseCase
-): BaseViewModel() {
+) : BaseViewModel() {
 
     /** loadingIndicator display the loading state in screen **/
     private val _loadingIndicator by lazy { MutableLiveData<Boolean>() }
@@ -42,7 +44,7 @@ class UsersListViewModel @Inject constructor(
 
     private var sortType: SortType = SortType.NONE
 
-    private var isFilterEnabled : Boolean = false
+    private var isFilterEnabled: Boolean = false
 
     init {
         loadUsers()
@@ -73,9 +75,12 @@ class UsersListViewModel @Inject constructor(
         getUsersListUseCase.invoke(
             scope = viewModelScope,
             params = GetUsersListUseCase.Params(Constants.NUM_USER_REQUEST)
-        ){ result ->
+        ) { result ->
             when (result) {
-                is Result.Success -> _usersList.value = result.data.users.map()
+                is Result.Success -> {
+                    Log.d("elfoco", " leyendo respuesta OK en viewModel del Flow")
+                    _usersList.value = result.data.users.map()
+                }
                 is Result.Failure -> {
                     loading(false)
                     error.value = result.error?.errorInfo?.message
@@ -89,7 +94,7 @@ class UsersListViewModel @Inject constructor(
     /** fun to handle the loading state in the view */
     fun loading(value: Boolean) {
         _loadingIndicator.value = value
-        if(value) _scrollCompleted.value = false
+        if (value) _scrollCompleted.value = false
     }
 
     /** fun to handle the loading state in the view
@@ -100,13 +105,13 @@ class UsersListViewModel @Inject constructor(
     }
 
     /** update list which is visible to the user **/
-    private fun updateList(newList: MutableList<UserVO>?){
+    private fun updateList(newList: MutableList<UserVO>?) {
         _updatedList.value = newList
     }
 
     /** handle when user press on fav star to add/remove a user **/
     fun handleFavEvent(userVO: UserVO) {
-        list.value?.firstOrNull { it.name == userVO.name  }?.isFav = !userVO.isFav
+        list.value?.firstOrNull { it.name == userVO.name }?.isFav = !userVO.isFav
         updateList(list.value)
         updateFavDB(userVO)
     }
@@ -142,29 +147,36 @@ class UsersListViewModel @Inject constructor(
 
     fun sortBy(type: SortType, listToSort: MutableList<UserVO>? = list.value) {
         sortType = type
-        when(type) {
+        when (type) {
             SortType.NAME -> {
-                listToSort?.sortBy { user-> user.name }
+                listToSort?.sortBy { user -> user.name }
                 updateList(listToSort)
             }
             SortType.GENDER -> {
-                listToSort?.sortBy { user-> user.gender }
+                listToSort?.sortBy { user -> user.gender }
                 updateList(listToSort)
             }
             SortType.GENDER_NAME -> {
-                updateList(listToSort?.sortedWith(compareBy({ it.gender }, { it.name }))?.toMutableList())
+                updateList(
+                    listToSort?.sortedWith(compareBy({ it.gender }, { it.name }))?.toMutableList()
+                )
             }
             else -> updateList(
-                if(isFilterEnabled())listToSort
+                if (isFilterEnabled()) listToSort
                 else _totalList.value?.toMutableList()
             )
         }
     }
 
-    fun searchByNameOrEmail(typedText: String, listToSearch: MutableList<UserVO>? = _totalList.value) {
+    fun searchByNameOrEmail(
+        typedText: String,
+        listToSearch: MutableList<UserVO>? = _totalList.value
+    ) {
         if (typedText.isNotEmpty())
-            updateList(listToSearch?.filter { user -> user.name.contains(typedText, ignoreCase = true) ||
-                    user.email.contains(typedText, ignoreCase = true) }?.toMutableList())
+            updateList(listToSearch?.filter { user ->
+                user.name.contains(typedText, ignoreCase = true) ||
+                        user.email.contains(typedText, ignoreCase = true)
+            }?.toMutableList())
         else
             updateList(_totalList.value?.toMutableList())
 
@@ -172,7 +184,7 @@ class UsersListViewModel @Inject constructor(
     }
 
     private fun checkIfEmptyList(list: MutableList<UserVO>) {
-        if(list.isEmpty()) {
+        if (list.isEmpty()) {
             loading(false)
             error.value = RandomCoApiException.EMPTY_RESULT
             //set _scrollCompleted to true to make visible load_more button

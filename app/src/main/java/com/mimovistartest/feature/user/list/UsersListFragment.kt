@@ -34,6 +34,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import com.mimovistartest.BuildConfig
 
 @AndroidEntryPoint
 class UsersListFragment :
@@ -54,6 +55,7 @@ class UsersListFragment :
         super.addBindingVariables()
         with(binding) {
             setLoadMoreClicked(this@UsersListFragment::onLoadMoreClicked)
+            showTestButton = BuildConfig.SHOW_TEST_FIREBASE_BUTTON
         }
     }
 
@@ -63,8 +65,6 @@ class UsersListFragment :
     }
 
     private fun setUpView() {
-        binding.userList?.visibility = View.GONE
-
         //Set up the recycler view
         binding.userList?.let { rV ->
             (rV.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
