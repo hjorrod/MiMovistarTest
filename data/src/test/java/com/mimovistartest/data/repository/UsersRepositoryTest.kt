@@ -6,6 +6,8 @@ import com.mimovistartest.data.repository.local.ILocalDataSource
 import com.mimovistartest.data.repository.remote.IUsersRemoteDataSource
 import com.mimovistartest.data.util.Result
 import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -19,14 +21,12 @@ class UsersRepositoryTest {
     private lateinit var userDao: ILocalDataSource
     private lateinit var userApi: IUsersRemoteDataSource
 
-    //private lateinit var randomCoApi: RandomCoApi
-    //private lateinit var userDao: UserDao
-
     //Utilities
     lateinit var userFromApi: Result<UserPageDTO>
     lateinit var userFromDao: Result<List<UserEntity>>
 
     private var forceEmptyResult = false
+
     @Before
     fun setUp(){
         //Mocking UserApi
@@ -77,7 +77,7 @@ class UsersRepositoryTest {
     @Test
     fun repositoryAskAlwaysToApi(){
         runBlocking {
-            userRepository.getUsersList(any())
+            userRepository.getUsersList(any()).collect()
             verify(userApi, times(1)).getUsersList(any())
         }
     }
@@ -85,7 +85,7 @@ class UsersRepositoryTest {
     @Test
     fun daoIsNotCalledWhenApiReturnsUsersList() {
         runBlocking {
-            userRepository.getUsersList(any())
+            userRepository.getUsersList(any()).collect()
             verify(userDao, never()).getLocaleUserList()
         }
     }
@@ -120,12 +120,14 @@ class UsersRepositoryTest {
         }
     }
 
+   @InternalCoroutinesApi
    @Test
    fun notErrorWhenListIsEmptyFromApi() {
        forceEmptyResult = true
        runBlocking {
-           val result = userRepository.getUsersList(any())
-           assertEquals(true, result is Result.Failure)
+           userRepository.getUsersList(any()).collect { result ->
+               assertEquals(true, result is Result.Failure)
+           }
        }
    }
 

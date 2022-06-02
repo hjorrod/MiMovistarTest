@@ -1,9 +1,7 @@
 package com.mimovistartest.feature.user.list
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,45 +9,33 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.google.firebase.FirebaseApp
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.mimovistartest.BuildConfig
 import com.mimovistartest.R
 import com.mimovistartest.base.BaseFragment
 import com.mimovistartest.databinding.FragmentUserListBinding
 import com.mimovistartest.util.*
-import dev.skomlach.biometric.compat.*
-import org.koin.android.ext.android.bind
-import java.io.ByteArrayOutputStream
-import java.io.File
 import dagger.hilt.android.AndroidEntryPoint
+import dev.skomlach.biometric.compat.*
 import javax.inject.Inject
-import com.mimovistartest.BuildConfig
 
 @AndroidEntryPoint
 class UsersListFragment :
     BaseFragment<FragmentUserListBinding, UsersListViewModel>(UsersListViewModel::class) {
+
     override fun getLayoutId(): Int = R.layout.fragment_user_list
 
     override val viewModel: UsersListViewModel by viewModels()
 
     @Inject
+    lateinit var firebaseTest: FirebaseTest
+    @Inject
     lateinit var firebaseStorage: FirebaseStorage
-
-    @Inject
-    lateinit var firebaseFirestore: FirebaseFirestore
-    @Inject
-    lateinit var firebaseDatabase: FirebaseDatabase
 
     override fun addBindingVariables() {
         super.addBindingVariables()
@@ -147,160 +133,20 @@ class UsersListFragment :
         setUpView()
     }
 
-    override fun onResume() {
-        super.onResume()
-        startTestFirebaseDatabase()
-        //startBioAuth()
-        /*Handler(Looper.getMainLooper()).postDelayed({
-            startMyBioAuth()
-        }, 1500L)*/
-    }
-
     private var handlerSearch = Handler(Looper.getMainLooper())
     private val runnableSearch = Runnable {
         viewModel.searchByNameOrEmail(binding.etSearch?.text?.toString() ?: "")
     }
 
-    private fun startMyBioAuth() {
-        val promptInfo = BiometricPrompt.PromptInfo.Builder().apply {
-            setTitle("titulo")
-            setSubtitle("subtitulo")
-            setConfirmationRequired(true)
-            //setDeviceCredentialAllowed(true)
-            setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
-            setNegativeButtonText("NegativeText")
-        }.build()
-
-        val biometricPrompt = BiometricPrompt(requireActivity(), ContextCompat.getMainExecutor(requireContext()), object : BiometricPrompt.AuthenticationCallback() {
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                Toast.makeText(requireContext(),
-                    "Authentication error! $errorCode - $errString", Toast.LENGTH_SHORT)
-                    .show()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (binding.showTestButton == true) startTestFirebaseDatabase()
+        if (BuildConfig.SHOW_BIOMETRIC_INPUT)
+            Handler(Looper.getMainLooper()).post {
+                requireActivity().startMyBioAuth()
+                //requireActivity().startBioAuth()
             }
-
-            override fun onAuthenticationSucceeded(
-                result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                Toast.makeText(requireContext(),
-                    "Authentication succeeded!", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                Toast.makeText(requireContext(),
-                    "Authentication failed!", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
-
-        val biometricManager = BiometricManager.from(requireContext())
-        when(biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)){
-            BiometricManager.BIOMETRIC_SUCCESS ->{
-                Log.d("elfoco", "App can authenticate using biometrics.")
-                biometricPrompt.authenticate(promptInfo)
-            }
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->{
-                Log.d("elfoco", "BIOMETRIC_ERROR_NO_HARDWARE Hardware not available")
-            }
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->{
-                Log.d("elfoco", "BIOMETRIC_ERROR_HW_UNAVAILABLE Biometric features are currently unavailable.")
-            }
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED ->{
-                Log.d("elfoco", "BIOMETRIC_ERROR_NONE_ENROLLED The user hasn't associated any biometric credentials with their account.")
-            }
-            else ->{
-                Log.d("elfoco", "Nothing supported")
-            }
-        }
-        biometricPrompt.authenticate(promptInfo)
     }
-
-    private fun startBioAuth() {
-        val iris = BiometricAuthRequest(
-            BiometricApi.AUTO,
-            BiometricType.BIOMETRIC_IRIS,
-            BiometricConfirmation.ANY
-        )
-        val faceId = BiometricAuthRequest(
-            BiometricApi.AUTO,
-            BiometricType.BIOMETRIC_FACE,
-            BiometricConfirmation.ANY
-        )
-        val fingerprint = BiometricAuthRequest(
-            BiometricApi.AUTO,
-            BiometricType.BIOMETRIC_FINGERPRINT,
-            BiometricConfirmation.ANY
-        )
-        var title = "Title"
-        val currentBiometric = faceId
-            /*if (BiometricManagerCompat.isHardwareDetected(iris)
-                && BiometricManagerCompat.hasEnrolled(iris)
-            ) {
-                title =
-                    "Your eyes are not only beautiful, but you can use them to unlock our app"
-                iris
-            } else
-                if (BiometricManagerCompat.isHardwareDetected(faceId)
-                    && BiometricManagerCompat.hasEnrolled(faceId)
-                ) {
-                    title = "Use your smiling face to enter the app"
-                    faceId
-                } else if (BiometricManagerCompat.isHardwareDetected(fingerprint)
-                    && BiometricManagerCompat.hasEnrolled(fingerprint)
-                ) {
-                    title = "Your unique fingerprints can unlock this app"
-                    fingerprint
-                } else {
-                    null
-                }*/
-
-        currentBiometric?.let { biometricAuthRequest ->
-            if (BiometricManagerCompat.isBiometricSensorPermanentlyLocked(biometricAuthRequest)
-                || BiometricManagerCompat.isLockOut(biometricAuthRequest)
-            ) {
-                showToast("Biometric not available right now. Try again later")
-                return
-            }
-
-            val prompt = BiometricPromptCompat.Builder(requireActivity()).apply {
-                this.setTitle(title)
-                this.setNegativeButton("Cancel", null)
-                this.setDescription("Description")
-                this.setEnabledNotification(false)//hide notification
-                this.setEnabledBackgroundBiometricIcons(false)//hide duplicate biometric icons above dialog
-            }.build()
-
-            prompt.authenticate(object : BiometricPromptCompat.AuthenticationCallback() {
-                override fun onSucceeded(confirmed: Set<BiometricType>) {
-                    showToast("User authorized :)")
-                }
-
-                override fun onCanceled() {
-                    showToast("Auth canceled :|")
-                }
-
-                override fun onFailed(reason: AuthenticationFailureReason?) {
-                    showToast("Fatal error happens :(\nReason $reason")
-                }
-
-                override fun onUIOpened() {}
-
-                override fun onUIClosed() {}
-            })
-        } ?: run {
-            showToast("No available biometric on this device")
-        }
-    }
-
-    private fun showToast(msg: String) {
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG)
-    }
-
-    /**
-     * INICIO PRUEBAS FIREBASE - STORAGE - DATABASE
-     */
 
     private fun startTestFirebaseDatabase() {
         // CREATE ACTION FOR BUTTON
@@ -311,64 +157,13 @@ class UsersListFragment :
             }
         }
 
-        Log.d("elfoco", " apsp ${ FirebaseApp.getApps(requireContext())}")
-
-        // STORAGE
-        val storageRef = firebaseStorage.reference
-        val imagesRef = storageRef.child("images")
-
         //Upload from memory (imageView)
         binding.imageViewprueba?.isDrawingCacheEnabled = true
         binding.imageViewprueba?.buildDrawingCache()
         val bitmap = (binding.imageViewprueba?.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-        val foodBis = imagesRef.child("foodBis.jpg")
 
-        val uploadTask = foodBis.putBytes(data)
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-            Log.d("elfoco", " fichero subido desde imageView con error $it - ${it.message} - ${it.localizedMessage} - ${it.cause}")
-        }.addOnSuccessListener { taskSnapshot ->
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            // ...
-            Log.d("elfoco", " fichero subido con exito desde imageView")
-        }
-
-        // FIRESTORE
-        firebaseFirestore.collection("cities").document("Getafe")
-            .set(City("Leganés", "España"))
-            .addOnSuccessListener {
-                Log.d("elfoco", " base de datos escrita con exito")
-            }.addOnFailureListener {
-                Log.d("elfoco", " base de datos escrita con error")
-            }
-
-        firebaseFirestore.collection("cities")
-            .whereEqualTo("country", "España")
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    Log.d("elfoco", "${document.id} => ${document.data}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("elfoco", "Error getting documents: ", exception)
-            }
-
-        firebaseFirestore.collection("cities")
-            .addSnapshotListener { value, error ->
-                Log.d("elfoco", "database change")
-            }
-
-        // REALTIME DATABASE
-        val dRef = firebaseDatabase.reference
-        dRef.child("users").child("miles").setValue(UserBis())
+        firebaseTest.startFirebaseTest(bitmap)
     }
-
-    data class City (val name: String =  "Getafe", val country: String = "Spain")
-    data class UserBis (val name: String =  "Michael", val first: String = "Miles", val born: Int = 1990)
 
     private val galleryActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         // Storage upload from mobile gallery
@@ -379,14 +174,10 @@ class UsersListFragment :
         val foodRef = imagesRef.child(imagePath)
         if (imageFile != null) {
             foodRef.putFile(imageFile).addOnSuccessListener {
-                Log.d("elfoco", " fichero subido con exito ${it.metadata?.path}")
+                Log.d(TAG, " fichero subido con exito ${it.metadata?.path}")
             }.addOnFailureListener{
-                Log.d("elfoco", " fichero subido con error $it - ${it.message} - ${it.localizedMessage} - ${it.cause}")
+                Log.d(TAG, " fichero subido con error $it - ${it.message} - ${it.localizedMessage} - ${it.cause}")
             }
         }
     }
-
-    /**
-     * FIN PRUEBAS FIREBASE - STORAGE - DATABASE
-     */
 }

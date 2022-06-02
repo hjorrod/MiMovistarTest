@@ -15,7 +15,6 @@ import com.mimovistartest.model.joinList
 import com.mimovistartest.model.map
 import com.mimovistartest.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @HiltViewModel
@@ -78,7 +77,6 @@ class UsersListViewModel @Inject constructor(
         ) { result ->
             when (result) {
                 is Result.Success -> {
-                    Log.d("elfoco", " leyendo respuesta OK en viewModel del Flow")
                     _usersList.value = result.data.users.map()
                 }
                 is Result.Failure -> {

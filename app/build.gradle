@@ -43,11 +43,18 @@ android {
         firebaseTest {
             dimension "environment"
             buildConfigField "Boolean", "SHOW_TEST_FIREBASE_BUTTON", "true"
+            buildConfigField "Boolean", "SHOW_BIOMETRIC_INPUT", "false"
+        }
+        biometricTest{
+            dimension "environment"
+            buildConfigField "Boolean", "SHOW_TEST_FIREBASE_BUTTON", "false"
+            buildConfigField "Boolean", "SHOW_BIOMETRIC_INPUT", "true"
         }
         production {
             dimension "environment"
-
             buildConfigField "Boolean", "SHOW_TEST_FIREBASE_BUTTON", "false"
+            buildConfigField "Boolean", "SHOW_BIOMETRIC_INPUT", "false"
+
         }
     }
 

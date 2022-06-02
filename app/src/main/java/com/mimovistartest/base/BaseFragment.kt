@@ -17,14 +17,9 @@ import kotlin.reflect.KClass
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-//@AndroidEntryPoint
 abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(val viewModelClass: KClass<V>) :
     Fragment() {
 
-    //protected val viewModel: V by viewModel(viewModelClass)
-    //@Inject
-    //protected lateinit var viewModel: V
-    //private val viewModel: V by viewModels<viewModelClass>()
     protected open val viewModel: BaseViewModel by viewModels()
 
     protected lateinit var binding: T
@@ -71,9 +66,7 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(val viewMode
     abstract fun getLayoutId(): Int
 
     open fun init() {}
-    open fun observeViewModel() {
-        //viewModel = ViewModelProviders.of(this, viewModelFactory).get(viewModelClass)
-    }
+    open fun observeViewModel() {}
     open fun getBundleArguments() {}
     open fun addBindingVariables() {}
     open fun onScreenRotated(savedInstanceState: Bundle) { }

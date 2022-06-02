@@ -23,8 +23,7 @@ class UsersRemoteDataSource @Inject constructor(private val randomCoApi: RandomC
             response.body()?.let {
                 return if (it.users.isEmpty())
                     Result.Failure(exception = RandomCoApiException(RandomCoApiException.EMPTY_RESULT))
-                else
-                    Result.Success(UserPageDTO(it.pageInfo, getUniqueUserList(it.users)))
+                else Result.Success(UserPageDTO(it.pageInfo, getUniqueUserList(it.users)))
             } ?: kotlin.run {
                 return Result.Failure(exception = RandomCoApiException(RandomCoApiException.EMPTY_RESULT))
             }

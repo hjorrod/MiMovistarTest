@@ -9,21 +9,23 @@ import com.mimovistartest.domain.model.UserPageBO
 import com.mimovistartest.domain.model.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetUsersListUseCase @Inject constructor (private val repository: IUsersRepository) :
     UseCase<GetUsersListUseCase.Params, Result<UserPageBO>>() {
 
     override suspend fun run(params: Params): Flow<Result<UserPageBO>> {
-        return repository.getUsersList(params.count).map()
-//        var finalResult: Result<UserPageBO> = Result.Failure()
-//        repository.getUsersList(params.count).collect { result ->
-//            finalResult = when (result) {
-//                is Result.Success -> findFavUsersAndRemoved(result.data.map())
-//                is Result.Failure -> Result.Failure(result.error, result.exception)
-//            }
-//        }
-//        return finalResult
+        var result: Result<UserPageBO> = Result.Failure<UserPageBO>()
+        repository.getUsersList(params.count).collect { response ->
+            result = when(response){
+                is Result.Success -> {
+                    findFavUsersAndRemoved(response.data.map())
+                }
+                is Result.Failure -> Result.Failure<UserPageBO>(response.error, response.exception)
+            }
+        }
+        return flow { emit(result) }
     }
 
     /** when we receive a new random users list, we check the response and:
