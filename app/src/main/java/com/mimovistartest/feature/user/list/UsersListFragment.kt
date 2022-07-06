@@ -40,6 +40,7 @@ class UsersListFragment :
     override fun addBindingVariables() {
         super.addBindingVariables()
         with(binding) {
+            viewModel = this@UsersListFragment.viewModel
             setLoadMoreClicked(this@UsersListFragment::onLoadMoreClicked)
             showTestButton = BuildConfig.SHOW_TEST_FIREBASE_BUTTON
         }

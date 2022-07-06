@@ -10,12 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.mimovistartest.BR
-import com.mimovistartest.R
 import com.mimovistartest.util.OnShowErrorListener
 import kotlin.reflect.KClass
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(val viewModelClass: KClass<V>) :
     Fragment() {
@@ -34,14 +30,17 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(val viewMode
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(getLayoutId(), container, false)
+    ): View? {
+        binding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val isScreenRotating = savedInstanceState?.getBoolean(IS_SCREEN_ROTATING) ?: false
 
-        initDataBinding()
+        setUpDataBinding()
         getBundleArguments()
         observeBase()
         observeViewModel()
@@ -72,14 +71,8 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(val viewMode
     open fun onScreenRotated(savedInstanceState: Bundle) { }
 
 
-    private fun initDataBinding() {
-        binding = DataBindingUtil.bind<T>(requireView())!!
-        binding.lifecycleOwner = viewLifecycleOwner
-        if (resources.getString(R.string.device_type) == "phone")
-            binding.setVariable(BR.viewModel, this@BaseFragment.viewModel)
-        else
-            binding.setVariable(BR.viewModelTablet, this@BaseFragment.viewModel)
-        lifecycle.addObserver(this@BaseFragment.viewModel)
+    private fun setUpDataBinding() {
+        binding.lifecycleOwner = this
         addBindingVariables()
     }
 
@@ -96,5 +89,4 @@ abstract class BaseFragment<T : ViewDataBinding, V : BaseViewModel>(val viewMode
     companion object {
         private const val IS_SCREEN_ROTATING = "IS_SCREEN_ROTATING"
     }
-
 }

@@ -28,6 +28,11 @@ class UsersListTabletFragment :
         setUpView()
     }
 
+    override fun addBindingVariables() {
+        super.addBindingVariables()
+        binding.viewModelTablet = viewModel
+    }
+
     private fun setUpView() {
         //Set up the recycler view
         binding.userListTablet?.let { userRV ->
