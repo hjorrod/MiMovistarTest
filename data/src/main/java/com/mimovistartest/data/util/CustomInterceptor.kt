@@ -1,5 +1,6 @@
 package com.mimovistartest.data.util
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -22,6 +23,7 @@ class CustomInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
 
+        Log.d("elfoco", " interceptor")
         var networkProblem = false
         val original: Request = chain.request()
 

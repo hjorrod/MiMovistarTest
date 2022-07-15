@@ -60,8 +60,9 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRandomCoApi(): RandomCoApi = Retrofit.Builder()
+    fun provideRandomCoApi(client: OkHttpClient = provideHttpInterceptorOkHttpClient()): RandomCoApi = Retrofit.Builder()
         .baseUrl(BuildConfig.BASE_URL)
+        .client(client)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(RandomCoApi::class.java)
